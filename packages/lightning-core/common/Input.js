@@ -10,7 +10,7 @@ export class Input extends React.Component {
   handleBlur = () => this.setState({ focused: false })
   handleClick = () => {
     const { selectOnClick, copyOnClick, onCopy, onClick } = this.props
-    if (copyOnClick) {
+    if (copyOnClick && !this.props.disabled) {
       this.input.select()
 
       try {
@@ -26,7 +26,7 @@ export class Input extends React.Component {
   }
 
   render() {
-    const { name, right, left, type, placeholder, value, sanitizeReturn,
+    const { name, right, left, type, placeholder, value, sanitizeReturn, disabled,
       onChange, outlineColor, fullWidth } = this.props
     const styles = reactCSS({
       'default': {
@@ -74,8 +74,8 @@ export class Input extends React.Component {
           type={ type }
           placeholder={ placeholder }
           value={ value }
+          disabled={ disabled }
           onChange={ handleChange }
-
           onFocus={ this.handleFocus }
           onBlur={ this.handleBlur }
         />

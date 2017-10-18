@@ -11,7 +11,7 @@ export class BitcoinWallet extends React.Component {
   componentDidMount() { this.props.onFetchAddress() }
 
   render() {
-    const { address, onSuccess, onShowQR } = this.props
+    const { address, isSynced, onSuccess, onShowQR } = this.props
 
     const styles = reactCSS({
       'default': {
@@ -47,8 +47,8 @@ export class BitcoinWallet extends React.Component {
       },
     })
 
-    const handleCopy = () => onSuccess('Copied to Clipboard')
-    const handleClick = () => onShowQR(QR_CODE)
+    const handleCopy = () => isSynced && onSuccess('Copied to Clipboard')
+    const handleClick = () => isSynced && onShowQR(QR_CODE)
 
     const label = (
       <div style={ styles.label }>Wallet Address</div>
@@ -70,6 +70,7 @@ export class BitcoinWallet extends React.Component {
           onCopy={ handleCopy }
           left={ label }
           value={ address }
+          disabled={ !isSynced }
         />
         <div style={ styles.icon }>
           <Icon name="qrcode" onClick={ handleClick } />

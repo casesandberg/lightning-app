@@ -10,7 +10,7 @@ import { CurrencyInput, Head, Input, Page } from '../common'
 import PaymentRequestPopup, { POPUP_NAME } from './PaymentRequestPopup'
 import BitcoinWallet from './BitcoinWallet'
 
-export const Pay = ({ showPopup, closePopup, paymentRequest, address,
+export const Pay = ({ showPopup, closePopup, paymentRequest, address, isSynced,
   onFetchAddress, onGeneratePaymentRequest, onSuccess }) => {
   const fields = [
     {
@@ -18,23 +18,28 @@ export const Pay = ({ showPopup, closePopup, paymentRequest, address,
       placeholder: 'Amount',
       required: true,
       component: CurrencyInput,
+      disabled: !isSynced,
     },
     {
       name: 'note',
       placeholder: 'Note',
       component: Input,
+      disabled: !isSynced,
     },
   ]
 
   const handleSuccess = ({ amount, note }, clear) => {
-    onGeneratePaymentRequest({ amount, note })
-      // eslint-disable-next-line no-console
-      .catch(console.error)
-    showPopup(POPUP_NAME)
-    clear()
+    if (isSynced) {
+      onGeneratePaymentRequest({ amount, note })
+        // eslint-disable-next-line no-console
+        .catch(console.error)
+      showPopup(POPUP_NAME)
+      clear()
+    }
   }
 
   const handleError = (errors) => {
+    // eslint-disable-next-line no-console
     console.log('error', errors)
   }
 
@@ -75,6 +80,7 @@ export const Pay = ({ showPopup, closePopup, paymentRequest, address,
       </Page>
       <BitcoinWallet
         address={ address }
+        isSynced={ isSynced }
         onSuccess={ onSuccess }
         onShowQR={ showPopup }
         onFetchAddress={ onFetchAddress }
@@ -87,6 +93,7 @@ export default connect(
   state => ({
     paymentRequest: store.getPaymentRequest(state),
     address: store.getAddress(state),
+    isSynced: store.getSyncedToChain(state),
   }), {
     showPopup: popupActions.onOpen,
     closePopup: popupActions.onClose,
