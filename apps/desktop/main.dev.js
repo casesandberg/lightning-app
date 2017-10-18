@@ -1,4 +1,4 @@
-/* eslint-disable global-require, no-console */
+/* eslint-disable */
 
 import { app, BrowserWindow, Menu } from 'electron'
 import path from 'path'
@@ -102,7 +102,7 @@ const createWindow = () => {
            const credentials = grpc.credentials.createSsl(lndCert)
            const { lnrpc } = grpc.load(path.join(__dirname, 'rpc.proto'))
            const connection = new lnrpc.Lightning('localhost:10009', credentials)
-           const serverReady = cb => 
+           const serverReady = cb =>
              grpc.waitForClientReady(connection, Infinity, cb)
            global.connection = connection
            global.serverReady = serverReady
@@ -196,7 +196,11 @@ const finishCreateWindow = () => {
     },
   ]
 
-  !isDev && Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+  // Set null to remove from windows and linux
+  // https://github.com/electron/electron/blob/master/docs/api/menu.md#menusetapplicationmenumenu
+  const menu = plat === 'darwin' ? Menu.buildFromTemplate(template) : null
+
+  !isDev && Menu.setApplicationMenu(menu)
 }
 
 // if (isDev) {
