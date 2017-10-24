@@ -1,5 +1,4 @@
 {
-  "name": "lightning-app",
   "version": "0.1.1",
   "description": "",
   "main": "index.js",
@@ -13,7 +12,8 @@
     "package-electron": "cd apps/desktop && npm run package",
     "package-all-electron": "cd apps/desktop && npm run package-all",
     "eslint": "node_modules/.bin/eslint packages/**/*.js --quiet",
-    "install-grpc": "cd apps/desktop && npm run install-grpc"
+    "install-grpc": "cd apps/desktop && npm run install-grpc",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -27,8 +27,17 @@
     "babel-preset-react": "^6.11.1",
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.5.0",
+    "enzyme": "^3.1.0",
+    "enzyme-adapter-react-15": "^1.0.2",
+    "jest": "^19.3.0-alpha.85402254",
     "lerna": "2.0.0-beta.31",
     "react": "^15.4.1",
     "react-dom": "^15.4.1"
+  },
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "<rootDir>/release/"
+    ],
+     "setupTestFrameworkScriptFile": "<rootDir>/scripts/jest/environment.js"
   }
 }
